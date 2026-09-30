@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class Benchmark {
@@ -17,19 +18,35 @@ public class Benchmark {
                 MatrixSum.sumByRows(matrix);
                 MatrixSum.sumByColumn(matrix);
 
+            }
+            long[] rowsTimes = new long[11];
+            long checksum = 0;
+            for(int j=0; j<11; j++){
                 long start = System.nanoTime();
-                MatrixSum.sumByRows(matrix);
+                checksum += MatrixSum.sumByRows(matrix);
                 long end = System.nanoTime();
-                System.out.println(end-start);
-
-                long columnStart = System.nanoTime();
-                MatrixSum.sumByColumn(matrix);
-                long columnEnd = System.nanoTime();
-                System.out.println(columnEnd-columnStart);
-
-
+                rowsTimes[j]=end-start;
 
             }
+            long[] columnsTimes=new long[11];
+            for(int j=0; j<11; j++){
+                long startCol= System.nanoTime();
+                checksum += MatrixSum.sumByColumn(matrix);
+                long endCol=System.nanoTime();
+                columnsTimes[j]=endCol-startCol;
+            }
+            Arrays.sort(rowsTimes);
+            Arrays.sort(columnsTimes);
+
+            long rowsMedian = rowsTimes[5];
+            long columnsMedian = columnsTimes[5];
+            double ratio=(double) columnsMedian/rowsMedian;
+
+            System.out.println(size+ ": " + rowsMedian + " " + columnsMedian + " " + ratio);
+            System.out.println("Checksum: " + checksum);
+
+
+
         }
 
     }
